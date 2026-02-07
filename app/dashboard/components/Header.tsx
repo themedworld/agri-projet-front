@@ -1,53 +1,33 @@
 "use client";
+import { Menu, Bell, User, Search } from "lucide-react";
 
-import { useEffect, useState } from "react";
-import { Bell, User } from "lucide-react";
-
-export default function ClientHeader() {
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
+export default function ClientHeader({ setMobileOpen }: any) {
   return (
-    <header className="h-16 px-8 flex items-center justify-between
-      bg-white border-b border-slate-200 sticky top-0 z-30"
-    >
-      {/* Left */}
-      <div className="flex items-center gap-3">
-        <span className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-        <p className="text-sm text-slate-500">
-          Société :
-          <span className="text-slate-900 font-medium ml-1">
-            {user?.company?.name ?? "—"}
-          </span>
-        </p>
+    <header className="h-16 lg:h-20 px-4 lg:px-8 flex items-center justify-between bg-white/80 backdrop-blur-md border-b sticky top-0 z-30">
+      <div className="flex items-center gap-4">
+        {/* Bouton Hamburger Mobile */}
+        <button 
+          onClick={() => setMobileOpen(true)}
+          className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+        >
+          <Menu size={24} />
+        </button>
+        
+        <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-green-50 rounded-full border border-green-100">
+          <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+          <span className="text-[10px] font-bold text-green-700 uppercase">Live Data</span>
+        </div>
       </div>
 
-      {/* Right */}
-      <div className="flex items-center gap-6">
-        <button className="text-slate-400 hover:text-blue-600">
+      <div className="flex items-center gap-3 lg:gap-6">
+        <button className="p-2 text-slate-400 hover:bg-slate-50 rounded-full"><Search size={20} /></button>
+        <button className="p-2 text-slate-400 hover:bg-slate-50 rounded-full relative">
           <Bell size={20} />
+          <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full border-2 border-white" />
         </button>
-
-        <div className="flex items-center gap-3">
-          <div className="text-right hidden sm:block">
-            <p className="text-sm font-semibold text-slate-800">
-              {user?.fullname ?? "Admin"}
-            </p>
-            <p className="text-xs text-slate-400">
-              Administrateur société
-            </p>
-          </div>
-
-          <div className="h-10 w-10 rounded-xl bg-blue-600 text-white
-            flex items-center justify-center font-semibold">
-            {user?.fullname?.[0]?.toUpperCase() || <User size={16} />}
-          </div>
+        
+        <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shadow-md">
+          A
         </div>
       </div>
     </header>

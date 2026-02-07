@@ -1,40 +1,37 @@
 "use client";
-import ClientHeader from "./components/Header"
-import ClientSidebar from "./components/Sidebar"
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import ClientHeader from "./components/Header";
+import ClientSidebar from "./components/Sidebar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    const user = localStorage.getItem("user");
+  return (
+    <div className="flex h-screen w-full bg-slate-50 overflow-hidden font-sans">
+      
+      {/* Sidebar - Reçoit les props de contrôle mobile */}
+      <ClientSidebar isMobileOpen={isMobileOpen} setMobileOpen={setIsMobileOpen} />
 
-    if (!token || !user) {
-      router.push("/login");
-      return;
-    }
+      <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
+        
+        {/* Header - Reçoit le déclencheur mobile */}
+        <ClientHeader setMobileOpen={setIsMobileOpen} />
 
-    const role = JSON.parse(user).role;
-    if ( role !== "client") {
-      router.push("/unauthorized");
-    }
-  }, [router]);
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+          <div className="mx-auto max-w-7xl">
+            {/* Titre de page dynamique optionnel */}
+            <div className="mb-6 lg:mb-8">
+              <h1 className="text-2xl font-bold text-slate-900 lg:text-3xl">Bienvenue sur votre espace</h1>
+              <p className="text-slate-500 text-sm">Gérez vos exploitations en temps réel.</p>
+            </div>
 
-    return (
-      <div className="flex min-h-screen bg-slate-100">
-        {/* Sidebar */}
-        <ClientSidebar />
-  
-        {/* Main content */}
-        <div className="flex flex-col flex-1">
-          <ClientHeader/>
-  
-          <main className="flex-1 p-6 md:p-8">
-            {children}
-          </main>
-        </div>
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {children}
+            </div>
+          </div>
+        </main>
       </div>
-    );
+    </div>
+  );
 }
